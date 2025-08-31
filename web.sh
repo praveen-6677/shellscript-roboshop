@@ -39,7 +39,7 @@ curl -o /tmp/web.zip https://roboshop-builds.s3.amazonaws.com/web.zip
   unzip /tmp/web.zip  
   VALIDATE $? "unzipping files"
         
- cp /home/ec-2user/roboshop.conf /etc/nginx/default.d
+ cp /home/ec-2user/script-roboshop/roboshop.conf /etc/nginx/default.d
  VALIDATE $? "copying config file"
 
 
