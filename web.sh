@@ -5,6 +5,7 @@ VALIDATE() {
 if [ $1 -ne 0 ]
    then
    echo :  "installing $2 failed"
+   exit 1
   else
   echo : "installing $2 success" 
  fi 
@@ -29,9 +30,15 @@ if  [ $ID -ne 0 ]
  rm -rf /usr/share/nginx/html/*
  VALIDATE $? "removing files"
 
- unzip /tmp/web.zip
- VALIDATE $? "unziping files"
+curl -o /tmp/web.zip https://roboshop-builds.s3.amazonaws.com/web.zip
+ VALIDATE $? "downloading files"
 
+ cd /usr/share/nginx/html
+  VALIDATE $? "downloading files"
+
+  unzip /tmp/web.zip  
+  VALIDATE $? "unzipping files"
+        
  cp /home/ec-2user/roboshop.conf /etc/nginx/default.d
  VALIDATE $? "copying config file"
 
