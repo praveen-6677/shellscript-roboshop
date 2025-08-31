@@ -1,3 +1,4 @@
+#!/bim/bash
 ID=$(id -u)
 
 VALIDATE() {
