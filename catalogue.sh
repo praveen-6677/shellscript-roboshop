@@ -18,10 +18,16 @@ validate () {
 dnf install nodejs -y
 validate "Failed to install Node.js"
 
-useradd roboshop
-validate "Failed to create roboshop user"
+id roboshop #if roboshop user does not exist, then it is failure
+if [ $? -ne 0 ]
+then
+    useradd roboshop
+    validate "roboshop user created"
+else
+    echo -e "roboshop user already exist SKIPPING"
+fi
 
-mkdir /app 
+mkdir -p /app 
 validate "Failed to create /app directory"
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue.zip 
