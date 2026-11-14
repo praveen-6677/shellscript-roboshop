@@ -39,7 +39,7 @@ validate "Failed to change directory"
 npm install 
 validate "Failed to install Node.js dependencies"
 
-cp catalogue.service /etc/systemd/system/catalogue.service
+cp catalogue.service /etc/systemd/system
 validate "Failed to copy catalogue.service file"
 
 systemctl daemon-reload
