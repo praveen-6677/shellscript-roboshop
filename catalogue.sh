@@ -56,3 +56,15 @@ validate "Failed to enable catalogue service"
 
 systemctl start catalogue
 validate "Failed to start catalogue service"
+
+cp /home/ec2-user/shellscript-roboshop/mongod.repo /etc/yum.repos.d/mongod.repo
+
+validate "copying mongodb repo"
+
+dnf install mongodb-org-shell -y 
+
+validate "Installing MongoDB client failed"
+
+mongo --host $MONGDB_HOST </app/schema/catalogue.js 
+
+validate  "Loading catalouge data into MongoDB failed"
