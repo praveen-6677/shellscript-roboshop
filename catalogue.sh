@@ -14,11 +14,6 @@ validate () {
         exit 1
     fi
 }
-dnf module disable nodejs -y
-
-dnf module enable nodejs -y
-
-validate "Failed to configure Node.js module"
 
 dnf install nodejs -y
 validate "Failed to install Node.js"
