@@ -1,52 +1,36 @@
-#!/bim/bash
-ID=$(id -u)
+#!/bin/bash
 
-VALIDATE() {
-if [ $1 -ne 0 ]
-   then
-   echo :  "installing $2 failed"
-   exit 1
-  else
-  echo : "installing $2 success" 
- fi 
- }
-if  [ $ID -ne 0 ]    
-  then
-     echo "run the script with root user"
-   exit 1  
-   else 
-     echo " you are root user "
-  fi   
+ID = $(id -u)
 
- dnf install nginx -y  
- VALIDATE $? "installing nginix"
- 
- systemctl enable nginx
- VALIDATE $? "enabling nginx"
+if [ "$ID" -ne 0 ]; then
+    echo "Run as root user"
+    exit 1
+else
+    echo "you are root user"
+fi
+validate () {
+    if [ $? -ne 0 ]; then
+        echo "Error: $1"
+        exit 1
+    fi
+}
 
- systemctl start nginx
- VALIDATE $? "start nginx"
+dnf install nginx -y 
+validate "Failed to install nginx"  
 
- rm -rf /usr/share/nginx/html/*
- VALIDATE $? "removing files"
+systemctl enable nginx 
+systemctl start nginx 
 
-curl -o /tmp/web.zip https://roboshop-builds.s3.amazonaws.com/web.zip
- VALIDATE $? "downloading files"
+rm -rf /usr/share/nginx/html/* 
 
- cd /usr/share/nginx/html
-  VALIDATE $? "downloading files"
+cd /usr/share/nginx/html
+validate "Failed to change directory to /usr/share/nginx/html"
 
-  unzip /tmp/web.zip  
-  VALIDATE $? "unzipping files"
-        
- cp /home/ec2-user/shellscript-roboshop/roboshop.conf /etc/nginx/default.d/roboshop.conf 
- VALIDATE $? "copying config file"
+unzip /tmp/frontend.zip
+validate "Failed to unzip frontend.zip"
 
+cp roboshop.conf /etc/nginx/default.d/roboshop.conf
+validate "Failed to copy roboshop.conf file"
 
-
-systemctl restart nginx 
-
- VALIDATE $? "restarting nginix"
-
-
-
+systemctl restart nginx
+validate "Failed to restart nginx service"
