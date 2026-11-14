@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 ID=$(id -u)
@@ -6,65 +7,73 @@ if [ "$ID" -ne 0 ]; then
     echo "Run as root user"
     exit 1
 else
-    echo "you are root user"
+    echo "You are root user"
 fi
-validate () {
+
+validate() {
     if [ $? -ne 0 ]; then
         echo "Error: $1"
         exit 1
     fi
 }
 
-dnf install nodejs -y
-validate "Failed to install Node.js"
+# MongoDB private IP
+MONGODB_HOST="172.31.35.167"
 
-id roboshop #if roboshop user does not exist, then it is failure
-if [ $? -ne 0 ]
-then
+dnf install nodejs unzip curl -y
+validate "Failed to install dependencies"
+
+id roboshop
+if [ $? -ne 0 ]; then
     useradd roboshop
-    validate "roboshop user created"
+    validate "Failed to create roboshop user"
 else
-    echo -e "roboshop user already exist SKIPPING"
+    echo "Roboshop user already exists SKIPPING"
 fi
 
-mkdir -p /app 
+mkdir -p /app
 validate "Failed to create /app directory"
 
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue.zip 
+curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue.zip
 validate "Failed to download catalogue.zip"
 
-cd /app 
+cd /app
 validate "Failed to change directory"
 
-unzip /tmp/catalogue.zip
+unzip -o /tmp/catalogue.zip
 validate "Failed to unzip catalogue.zip"
 
-cd /app 
-validate "Failed to change directory"
-
-npm install 
+npm install
 validate "Failed to install Node.js dependencies"
 
-cp /home/ec2-user/shellscript-roboshop/catalogue.service /etc/systemd/system
-validate "Failed to copy catalogue.service file"
+cp /home/ec2-user/shellscript-roboshop/catalogue.service /etc/systemd/system/
+validate "Failed to copy catalogue.service"
 
+# Install MongoDB Shell
+cp /home/ec2-user/shellscript-roboshop/mongod.repo /etc/yum.repos.d/mongod.repo
+validate "Failed to copy MongoDB repository"
+
+dnf install mongodb-mongosh -y
+validate "Installing MongoDB Shell failed"
+
+# Check MongoDB connectivity
+mongosh --host "$MONGODB_HOST" --eval "db.adminCommand('ping')"
+validate "MongoDB connection failed"
+
+# Load product catalogue
+mongosh "mongodb://${MONGODB_HOST}:27017/catalogue" \
+    --file /app/schema/catalogue.js
+
+validate "Loading catalogue data into MongoDB failed"
+
+# Start Catalogue service
 systemctl daemon-reload
 validate "Failed to reload systemd daemon"
 
 systemctl enable catalogue
 validate "Failed to enable catalogue service"
 
-systemctl start catalogue
+systemctl restart catalogue
 validate "Failed to start catalogue service"
 
-cp /home/ec2-user/shellscript-roboshop/mongod.repo /etc/yum.repos.d/mongod.repo
-
-validate "copying mongodb repo"
-
-dnf install mongodb-org-shell -y 
-
-validate "Installing MongoDB client failed"
-
-mongo --host $MONGDB_HOST </app/schema/catalogue.js 
-
-validate  "Loading catalouge data into MongoDB failed"
+echo "Catalogue setup completed successfully"
