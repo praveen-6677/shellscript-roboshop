@@ -16,7 +16,7 @@ validate () {
 }
 dnf module disable nodejs -y
 
-dnf module enable nodejs:18 -y
+dnf module enable nodejs -y
 
 validate "Failed to configure Node.js module"
 
