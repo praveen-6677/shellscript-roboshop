@@ -16,7 +16,6 @@ validate () {
 }
 
 dnf module disable mysql -y 
-validate "Failed to disable MySQL module"
 
 cp /hoome/ec2-user/shellscript-roboshop/mysql.repo /etc/yum.repos.d/mysql.repo   
 validate "Failed to copy mysql.repo file"
