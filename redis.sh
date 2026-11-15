@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ID = $(id -u)
+ID=$(id -u)
 
 if [ "$ID" -ne 0 ]; then
     echo "Run as root user"
@@ -16,7 +16,6 @@ validate () {
 }
 dnf module disable redis -y
 dnf module enable redis:6 -y
-validate "Failed to configure Redis module"
 dnf install redis -y
 validate "Failed to install Redis"  
 sed -i 's/127.0.0.1/0.0.0.0/' /etc/redis.conf
