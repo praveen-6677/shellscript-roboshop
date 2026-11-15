@@ -15,7 +15,8 @@ validate () {
     fi
 }
 
-dnf install python36 gcc python3-devel -y
+dnf install python3 gcc python3-devel python3-pip -y
+validate "Failed to install python3, gcc and python3-devel"
 validate "Failed to install python36, gcc and python3-devel"
 
 id roboshop #if roboshop user does not exist, then it is failure
