@@ -20,13 +20,13 @@ dnf install nodejs -y
 validate "Failed to install Node.js"
 
 id roboshop
-if [ $? -ne 0 ] then
+if [ $? -ne 0 ]
+ then
  useradd roboshop
-validate "user roboshop not created"
+ validate "user roboshop not created"
 else 
  echo -e "user roboshop already exists skipping"
 fi 
-validate "Failed to create roboshop user"
 
 mkdir -p /app
 validate "Failed to create /app directory"
