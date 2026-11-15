@@ -6,7 +6,7 @@ User=root
 WorkingDirectory=/app
 Environment=CART_HOST=172.31.38.137
 Environment=CART_PORT=8080
-Environment=USER_HOST=<USER-SERVER-IPADDRESS>
+Environment=USER_HOST=172.31.39.41
 Environment=USER_PORT=8080
 Environment=AMQP_HOST=172.31.45.4
 Environment=AMQP_USER=roboshop
