@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ID = $(id -u)
+ID=$(id -u)
 
 if [ "$ID" -ne 0 ]; then
     echo "Run as root user"
@@ -32,7 +32,7 @@ validate "Failed to change directory to /usr/share/nginx/html"
 unzip /tmp/frontend.zip
 validate "Failed to unzip frontend.zip"
 
-cp roboshop.conf /etc/nginx/default.d/roboshop.conf
+cp /home/ec2-user/shellscript-roboshop/roboshop.conf /etc/nginx/default.d/roboshop.conf
 validate "Failed to copy roboshop.conf file"
 
 systemctl restart nginx
