@@ -19,7 +19,6 @@ validate() {
 
 # Disable default MySQL module
 dnf module disable mysql -y
-validate "Failed to disable MySQL module"
 
 # Copy MySQL repository
 cp /home/ec2-user/shellscript-roboshop/mysql.repo /etc/yum.repos.d/mysql.repo
