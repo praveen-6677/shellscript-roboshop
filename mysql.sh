@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ID = $(id -u)
+ID=$(id -u)
 
 if [ "$ID" -ne 0 ]; then
     echo "Run as root user"
@@ -18,7 +18,7 @@ validate () {
 dnf module disable mysql -y 
 validate "Failed to disable MySQL module"
 
-cp mysql.repo /etc/yum.repos.d/mysql.repo   
+cp /hoome/ec2-user/shellscript-roboshop/mysql.repo /etc/yum.repos.d/mysql.repo   
 validate "Failed to copy mysql.repo file"
 dnf install mysql-community-server -y
 validate "Failed to install MySQL server"  
