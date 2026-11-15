@@ -17,7 +17,7 @@ validate () {
 
 dnf module disable mysql -y 
 
-cp /hoome/ec2-user/shellscript-roboshop/mysql.repo /etc/yum.repos.d/mysql.repo   
+cp /home/ec2-user/shellscript-roboshop/mysql.repo /etc/yum.repos.d/mysql.repo   
 validate "Failed to copy mysql.repo file"
 dnf install mysql-community-server -y
 validate "Failed to install MySQL server"  
