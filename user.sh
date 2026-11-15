@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ID = $(id -u)
+ID=$(id -u)
 
 if [ "$ID" -ne 0 ]; then
     echo "Run as root user"
@@ -15,16 +15,20 @@ validate () {
     fi
 }
 dnf module disable nodejs -y
-dnf module enable nodejs:18 -y
-validate "Failed to configure Node.js module"
 
 dnf install nodejs -y
 validate "Failed to install Node.js"
 
-useradd roboshop
+id roboshop
+if [ $? -ne 0 ] then
+echo "useradd roboshop"
+validate "user roboshop not created"
+else 
+ echo -e "user roboshop already exists skipping"
+fi 
 validate "Failed to create roboshop user"
 
-mkdir /app
+mkdir -p /app
 validate "Failed to create /app directory"
 
 curl -L -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user.zip 
