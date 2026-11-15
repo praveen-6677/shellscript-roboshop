@@ -23,6 +23,9 @@ systemctl start nginx
 
 rm -rf /usr/share/nginx/html/* 
 
+curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend.zip 
+validate "failed to unzip"
+
 cd /usr/share/nginx/html
 validate "Failed to change directory to /usr/share/nginx/html"
 
