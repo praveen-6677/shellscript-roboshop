@@ -21,7 +21,7 @@ validate "Failed to install Node.js"
 
 id roboshop
 if [ $? -ne 0 ] then
-echo "useradd roboshop"
+ useradd roboshop
 validate "user roboshop not created"
 else 
  echo -e "user roboshop already exists skipping"
@@ -43,7 +43,7 @@ validate "Failed to change directory"
 npm install
 validate "Failed to install Node.js dependencies"   
 
-cp user.service /etc/systemd/system/user.service
+cp /home/ec2-user/shellscript-roboshop/user.service /etc/systemd/system/user.service
 validate "Failed to copy user.service file"
 systemctl daemon-reload
 validate "Failed to reload systemd daemon"
