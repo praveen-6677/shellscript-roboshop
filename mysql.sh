@@ -26,7 +26,8 @@ systemctl enable mysqld
 systemctl start mysqld  
 validate "Failed to start MySQL service"
 
-mysql_secure_installation --set-root-pass RoboShop@1
+TEMP_PASS=$(grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}')
+mysql -uroot -p"$TEMP_PASS" --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'RoboShop@1'"
 validate "Failed to set MySQL root password"
 
 mysql -uroot -pRoboShop@1
